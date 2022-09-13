@@ -74,7 +74,7 @@ const validateFeatures = (name, description, color) => {
   return errors;
 };
 
-const validate = (name, cpf, email, phone, secondaryPhone) => {
+const validateClient = (name, cpf, email, phone, secondaryPhone) => {
   const err = [];
 
   if (!validateName(name)) {
@@ -97,4 +97,4 @@ const validateActive = (active) => {
   return regex.test(active);
 };
 
-module.exports = { validate, validateActive, validateFeatures };
+module.exports = { validateClient, validateActive, validateFeatures };
