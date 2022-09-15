@@ -1,8 +1,8 @@
-const moment = require('moment-timezone');
 const Client = require('../Models/ClientSchema');
+const DateHelpers = require('./dateHelpers');
 
 const buildHistory = (body, client, label) => {
-  const date = moment.utc(moment.tz('America/Sao_Paulo').format('YYYY-MM-DDTHH:mm:ss')).toDate();
+  const date = DateHelpers.dateNow();
   return {
     label,
     before: client[label],

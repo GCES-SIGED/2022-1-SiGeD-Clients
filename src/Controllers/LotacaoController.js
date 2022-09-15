@@ -1,5 +1,5 @@
-const moment = require('moment-timezone');
 const Lotacao = require('../Models/LotacaoSchema');
+const DateHelpers = require('../Utils/dateHelpers');
 
 const create = async (req, res) => {
   const {
@@ -7,7 +7,7 @@ const create = async (req, res) => {
   } = req.body;
 
   try {
-    const date = moment.utc(moment.tz('America/Sao_Paulo').format('YYYY-MM-DDTHH:mm:ss')).toDate();
+    const date = DateHelpers.dateNow();
     const lotacao = await Lotacao.create({
       name,
       description,
@@ -35,7 +35,7 @@ const update = async (req, res) => {
     const lotacao = await Lotacao.findOneAndUpdate({ _id: id }, {
       name,
       description,
-      updatedAt: moment.utc(moment.tz('America/Sao_Paulo').format('YYYY-MM-DDTHH:mm:ss')).toDate(),
+      updatedAt: DateHelpers.dateNow(),
     },
     { new: true });
     return res.json(lotacao);
@@ -59,7 +59,7 @@ const lotacaoDeactivate = async (req, res) => {
   try {
     const updateStatus = await Lotacao.findOneAndUpdate({ _id: id }, {
       status: 'desativado',
-      updatedAt: moment.utc(moment.tz('America/Sao_Paulo').format('YYYY-MM-DDTHH:mm:ss')).toDate(),
+      updatedAt: DateHelpers.dateNow(),
     }, { new: true }, (lotacao) => lotacao);
     return res.json(updateStatus);
   } catch {

@@ -1,10 +1,10 @@
-const moment = require('moment-timezone');
 const Client = require('../Models/ClientSchema');
 const validation = require('../Utils/validate');
 const { scheduleEmail } = require('../Utils/mailer');
 const verifyChanges = require('../Utils/verifyChanges');
 const { getUser } = require('../Services/Axios/userService');
 const { getDemands } = require('../Services/Axios/demandService');
+const DateHelpers = require('../Utils/dateHelpers');
 
 const getClientList = async (req, res) => {
   const { active, page, limit, filters, sort, } = req.query;
@@ -74,9 +74,7 @@ const create = async (req, res) => {
   }
 
   try {
-    const date = moment
-      .utc(moment.tz('America/Sao_Paulo').format('YYYY-MM-DDTHH:mm:ss'))
-      .toDate();
+    const date = DateHelpers.dateNow();
     const client = await Client.create({
       name,
       cpf,
@@ -158,9 +156,7 @@ const update = async (req, res) => {
       birthdate,
       healthRestrictions,
       administrativeRestrictions,
-      updatedAt: moment
-        .utc(moment.tz('America/Sao_Paulo').format('YYYY-MM-DDTHH:mm:ss'))
-        .toDate(),
+      updatedAt: DateHelpers.dateNow(),
     },
     { new: true },
   );

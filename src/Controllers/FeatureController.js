@@ -1,6 +1,7 @@
-const moment = require('moment-timezone');
 const Feature = require('../Models/FeatureSchema');
 const { validateFeatures } = require('../Utils/validate');
+const DateHelpers = require('../Utils/dateHelpers');
+
 
 const getFeaturesList = async (req, res) => {
   const featuresList = await Feature.find({
@@ -37,8 +38,8 @@ const createFeature = async (req, res) => {
     name,
     description,
     color,
-    createdAt: moment.utc(moment.tz('America/Sao_Paulo').format('YYYY-MM-DDTHH:mm:ss')).toDate(),
-    updatedAt: moment.utc(moment.tz('America/Sao_Paulo').format('YYYY-MM-DDTHH:mm:ss')).toDate(),
+    createdAt: DateHelpers.dateNow(),
+    updatedAt: DateHelpers.dateNow(),
   });
 
   return res.status(200).json(newFeature);
@@ -63,7 +64,7 @@ const updateFeature = async (req, res) => {
       name,
       description,
       color,
-      updatedAt: moment.utc(moment.tz('America/Sao_Paulo').format('YYYY-MM-DDTHH:mm:ss')).toDate(),
+      updatedAt: DateHelpers.dateNow(),
     }, { new: true }, (feature) => feature);
     return res.status(200).json(updateResponse);
   } catch (error) {
@@ -77,7 +78,7 @@ const deactiveFeature = async (req, res) => {
   try {
     const updateResponse = await Feature.findOneAndUpdate({ _id: id }, {
       active: false,
-      updatedAt: moment.utc(moment.tz('America/Sao_Paulo').format('YYYY-MM-DDTHH:mm:ss')).toDate(),
+      updatedAt: DateHelpers.dateNow(),
     }, { new: true }, (feature) => feature);
     return res.status(200).json(updateResponse);
   } catch (error) {
