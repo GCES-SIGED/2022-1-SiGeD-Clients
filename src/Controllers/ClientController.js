@@ -6,7 +6,7 @@ const verifyChanges = require('../Utils/verifyChanges');
 const { getUser } = require('../Services/Axios/userService');
 const { getDemands } = require('../Services/Axios/demandService');
 
-const accessList = async (req, res) => {
+const getClientList = async (req, res) => {
   const { active, page, limit, filters, sort, } = req.query;
   let mongoQuery = { active: true };
   if (active === 'false') {
@@ -47,7 +47,7 @@ const accessList = async (req, res) => {
   return res.json(clients);
 };
 
-const access = async (req, res) => {
+const getClientByID = async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -74,9 +74,6 @@ const create = async (req, res) => {
   }
 
   try {
-    const token = req.headers['x-access-token'];
-    const user = await getUser(userID, token);
-
     const date = moment
       .utc(moment.tz('America/Sao_Paulo').format('YYYY-MM-DDTHH:mm:ss'))
       .toDate();
@@ -104,7 +101,6 @@ const create = async (req, res) => {
       createdAt: date,
       updatedAt: date,
     });
-    // const fullCliente = await Client.findOne({email:client.email}).populate('location');
     return res.json(client);
   } catch (error) {
     return res.status(400).json({ message: error.keyValue });
@@ -126,7 +122,6 @@ const update = async (req, res) => {
     healthRestrictions,
     administrativeRestrictions,
     location,
-    userID,
     features,
     image,
   } = req.body;
@@ -144,12 +139,9 @@ const update = async (req, res) => {
     return res.status(400).json({ message: errorMessage });
   }
 
-  const token = req.headers['x-access-token'];
-  const user = await getUser(userID, token);
-
   const clientHistory = await verifyChanges(req.body, id);
-  const client2 = await Client.findById(id);
-  await client2.update(
+  const client = await Client.findById(id);
+  await client.update(
     {
       name,
       cpf,
@@ -172,7 +164,7 @@ const update = async (req, res) => {
     },
     { new: true },
   );
-  return res.json(client2);
+  return res.json(client);
 };
 
 const toggleStatus = async (req, res) => {
@@ -220,7 +212,6 @@ const history = async (req, res) => {
   const { id } = req.params;
 
   try {
-    let error = '';
     const token = req.headers['x-access-token'];
     const clientFound = await Client.findOne({ _id: id });
     const clientHistory = await Promise.all(
@@ -273,8 +264,8 @@ const sendEmailToClient = async (req, res) => {
 };
 
 module.exports = {
-  accessList,
-  access,
+  getClientList,
+  getClientByID,
   create,
   update,
   toggleStatus,

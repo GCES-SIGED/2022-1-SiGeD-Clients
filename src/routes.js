@@ -12,14 +12,14 @@ routes.get(
   verifyJWT,
   ClientController.newestFourClientsGet,
 );
-routes.get('/clients/:id', verifyJWT, ClientController.access);
+routes.get('/clients/:id', verifyJWT, ClientController.getClientByID);
 routes.put('/clients/update/:id', verifyJWT, ClientController.update);
 routes.put(
   '/clients/toggleStatus/:id',
   verifyJWT,
   ClientController.toggleStatus,
 );
-routes.get('/clients', verifyJWT, ClientController.accessList);
+routes.get('/clients', verifyJWT, ClientController.getClientList);
 routes.get('/clients/history/:id', verifyJWT, ClientController.history);
 routes.post(
   '/clients/send-email/:id',
@@ -29,7 +29,7 @@ routes.post(
 routes.get('/features/', verifyJWT, FeatureController.getFeaturesList);
 routes.post('/featuresbyid/', verifyJWT, FeatureController.getFeaturesByID);
 routes.post('/feature/create', verifyJWT, FeatureController.createFeature);
-routes.patch('/feature/desactive/:id', verifyJWT, FeatureController.desactiveFeature);
+routes.patch('/feature/desactive/:id', verifyJWT, FeatureController.deactiveFeature);
 routes.delete(
   '/feature/delete/:id',
   verifyJWT,

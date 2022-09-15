@@ -3,11 +3,11 @@ const Feature = require('../Models/FeatureSchema');
 const { validateFeatures } = require('../Utils/validate');
 
 const getFeaturesList = async (req, res) => {
-  const features = await Feature.find({
+  const featuresList = await Feature.find({
     active: true
   });
 
-  return res.json(features);
+  return res.json(featuresList);
 };
 
 const getFeaturesByID = async (req, res) => {
@@ -22,7 +22,9 @@ const getFeaturesByID = async (req, res) => {
 
 const createFeature = async (req, res) => {
   const {
-    name, description, color,
+    name,
+    description,
+    color,
   } = req.body;
 
   const errorList = validateFeatures(name, description, color);
@@ -45,7 +47,9 @@ const createFeature = async (req, res) => {
 const updateFeature = async (req, res) => {
   const { id } = req.params;
   const {
-    name, description, color,
+    name,
+    description,
+    color,
   } = req.body;
 
   const errorList = validateFeatures(name, description, color);
@@ -67,18 +71,7 @@ const updateFeature = async (req, res) => {
   }
 };
 
-const deleteFeature = async (req, res) => {
-  const { id } = req.params;
-
-  try {
-    await Feature.deleteOne({ _id: id });
-    return res.status(200).json({ message: 'success' });
-  } catch (error) {
-    return res.status(400).json({ message: 'Invalid ID' });
-  }
-};
-
-const desactiveFeature = async (req, res) => {
+const deactiveFeature = async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -90,8 +83,19 @@ const desactiveFeature = async (req, res) => {
   } catch (error) {
     return res.status(400).json({ message: 'Invalid ID' });
   }
-}
+};
+
+const deleteFeature = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await Feature.deleteOne({ _id: id });
+    return res.status(200).json({ message: 'success' });
+  } catch (error) {
+    return res.status(400).json({ message: 'Invalid ID' });
+  }
+};
 
 module.exports = {
-  getFeaturesList, getFeaturesByID, createFeature, updateFeature, deleteFeature, desactiveFeature
+  getFeaturesList, getFeaturesByID, createFeature, updateFeature, deleteFeature, deactiveFeature
 };

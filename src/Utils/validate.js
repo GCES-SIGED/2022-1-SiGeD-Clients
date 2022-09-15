@@ -4,12 +4,14 @@ const validateName = (name) => {
 };
 
 function validaCPF(cpf) {
-  let Soma = 0;
-  let Resto;
+  let sum = 0;
+  let module;
 
   const cpfToValidate = cpf.toString();
 
-  if (cpfToValidate.length !== 11) return false;
+  if (cpfToValidate.length !== 11) {
+    return false;
+  }
 
   if ([
     '00000000000',
@@ -22,25 +24,39 @@ function validaCPF(cpf) {
     '77777777777',
     '88888888888',
     '99999999999',
-  ].indexOf(cpfToValidate) !== -1) return false;
+  ].indexOf(cpfToValidate) !== -1) {
+    return false;
+  }
 
-  for (i = 1; i <= 9; i++) Soma += parseInt(cpfToValidate.substring(i - 1, i)) * (11 - i);
+  for (i = 1; i <= 9; i++) {
+    sum += parseInt(cpfToValidate.substring(i - 1, i)) * (11 - i);
+  }
 
-  Resto = (Soma * 10) % 11;
+  module = (sum * 10) % 11;
 
-  if ((Resto == 10) || (Resto == 11)) Resto = 0;
+  if ((module == 10) || (module == 11)) {
+    module = 0;
+  }
 
-  if (Resto != parseInt(cpfToValidate.substring(9, 10))) return false;
+  if (module != parseInt(cpfToValidate.substring(9, 10))) {
+    return false;
+  }
 
-  Soma = 0;
+  sum = 0;
 
-  for (i = 1; i <= 10; i++) Soma += parseInt(cpfToValidate.substring(i - 1, i)) * (12 - i);
+  for (i = 1; i <= 10; i++) {
+    sum += parseInt(cpfToValidate.substring(i - 1, i)) * (12 - i);
+  }
 
-  Resto = (Soma * 10) % 11;
+  module = (sum * 10) % 11;
 
-  if ((Resto == 10) || (Resto == 11)) Resto = 0;
+  if ((module == 10) || (module == 11)) {
+    module = 0;
+  }
 
-  if (Resto != parseInt(cpfToValidate.substring(10, 11))) return false;
+  if (module != parseInt(cpfToValidate.substring(10, 11))) {
+    return false;
+  }
 
   return true;
 }
@@ -65,9 +81,11 @@ const validateFeatures = (name, description, color) => {
 
   if (!name) {
     errors.push('invalid name');
-  } if (!description) {
+  }
+  if (!description) {
     errors.push('invalid description');
-  } if (!color) {
+  }
+  if (!color) {
     errors.push('invalid color');
   }
 
@@ -79,13 +97,17 @@ const validate = (name, cpf, email, phone, secondaryPhone) => {
 
   if (!validateName(name)) {
     err.push('invalid name');
-  } if (!validateCpf(cpf)) {
+  }
+  if (!validateCpf(cpf)) {
     err.push('invalid cpf');
-  } if (!validateEmail(email)) {
+  }
+  if (!validateEmail(email)) {
     err.push('invalid email');
-  } if (!validatePhone(phone)) {
+  }
+  if (!validatePhone(phone)) {
     err.push('invalid phone');
-  } if (!validatePhone(secondaryPhone)) {
+  }
+  if (!validatePhone(secondaryPhone)) {
     err.push('invalid secondary phone');
   }
 
