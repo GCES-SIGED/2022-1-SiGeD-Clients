@@ -65,7 +65,7 @@ const create = async (req, res) => {
     office, active, location, userID, features, image,
   } = req.body;
 
-  const errorMessage = validation.validate(
+  const errorMessage = validation.validateClient(
     name, cpf, email, phone, secondaryPhone, office,
   );
 
@@ -131,7 +131,7 @@ const update = async (req, res) => {
     image,
   } = req.body;
 
-  const errorMessage = validation.validate(
+  const errorMessage = validation.validateClient(
     name,
     cpf,
     email,
